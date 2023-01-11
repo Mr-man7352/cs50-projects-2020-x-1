@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block body %}
+<!DOCTYPE html>
+<html style="height:100%">
+<head>
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <title>Bookstore</title>
+</head>
+<body style="height:100%">
+    <div class='bg-light container'>
+         <div class='float-left'><a href="{{url_for('index')}}"><button>Home</button></a></div>
+        <div class='float-right'><b>{{username}}   </b></div>
+        <div class='float-left'><a href="{{url_for('logout')}}"><b><button>Log out</button></b></a></div>>
+    </div>
+<header class='container bg-light h-27 text-center '>
+      <h1 class="display-2 py-3"><u>Book Review Website <h1 class="display-6 py-2"><u><b>By:- Manish Sahu</b></u></h1></u></h1>
+</header>
+<nav class='navbar navbar-expand bg-dark navbar-dark justify-content-center'>
+    <form class="form-inline " action="{{url_for('index')}}" method="POST">
+        <input class="form-control mr-2" type="text" placeholder="title, author or ISBN" name="text">
+        <button class="btn btn-success" type="submit">Search</button>
+    </form>
+</nav>
+<main>
+    <div class='container  h-25'>
+
+<br>
+<div class='container bg-light row no-gutters'>
+    <h1 class='container bg-dark text-white text-center my-2'>{{data.title}}</h1>
+    <div class='col'>
+        Author:<h2> {{data.author}}</h2>
+        Year:<h2> {{data.year}}</h2>
+        Isbn:<h2> {{data.isbn}}</h2>
+    </div>
+    <div class='col text-center bg-info my-2'>
+        <h2 class=''>Goodread.com rating: </h2>
+        <h1>{{average_rating}}</h1>
+        <h5 class=''>Reviews received: </h5>
+        <h3>{{work_ratings_count}}</h3>
+    </div>
+</div>
+{% if reviews != None %}
+{% for x in reviews %}
+<div class='container bg-light my-3 '>
+    <h6>Rating: {{x.rating}} of 5</h6>
+    <blockquote class="blockquote">
+    <p>{{x.review}}</p>
+    <footer class="blockquote-footer">{{x.username}}</footer>
+    </blockquote>
+</div>
+{% endfor %}
+{% endif %}
+<div class='text-center text-danger'>{{warning}}</div>
+<div class='container bg-light my-2'>
+    <form class='form-group ' action="{{url_for('bookpage',isbn=data.isbn)}}" method="POST">
+        <label class='text-danger'>Write your review...</label>
+        <select name="stars" class='m-1' required>
+            <option selected value disabled> -- select rating -- </option>
+            <option value="1">1 star</option>
+            <option value="2">2 stars</option>
+            <option value="3">3 stars</option>
+            <option value="4">4 stars</option>
+            <option value="5">5 stars</option>
+        </select> 
+        <textarea class='form-control' name='textarea'>
+        </textarea>
+        <input class='my-2' type='submit' value='Send review'>
+    </form>
+</div>
+<div class='bg-light text-center '><a href='/api/{{data.isbn}}'>API</a></div>
+
+{% endblock %} 
